@@ -1,0 +1,35 @@
+.messages-container {
+  display: flex;
+  color: #a94442;
+  background-color: rgb(255, 250, 230);
+  border: 1px solid rgb(255, 250, 230);
+  padding: 17px;
+  font-family: Verdana, Tahoma, sans-serif;
+  position: relative;
+}
+
+.dKMyAW {
+  color: rgb(255, 139, 0);
+  display: inline-block;
+  fill: rgb(255, 250, 230);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: pointer;
+  background: rgb(250, 250, 250);
+  border-width: initial;
+  border-style: none;
+  border-color: initial;
+  border-image: initial;
+  padding: 4px;
+  border-radius: 2px;
+  transition: all 100ms ease 0s;
+}

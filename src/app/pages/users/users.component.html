@@ -1,0 +1,209 @@
+<div class="container-md">
+  <header>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+        <h3 class="headercontext" *ngIf="title">
+          <i class="fab fa-github"></i>
+          <span style="margin-left: 7px">{{ title }}</span>
+        </h3>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+        <div align="right" *ngIf="users && users?.items?.length > 0">
+          <h5>{{ users.total_count | number }} repository results</h5>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </header>
+
+  <ng-container>
+    <div class="container-fluid" style="margin-top: 17px">
+      <app-loading></app-loading>
+    </div>
+  </ng-container>
+
+  <div class="main-container" *ngIf="!loadingService.subject.getValue()">
+    <div class="row" style="margin-bottom: 17px">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+        <div class="form-control divinput">
+          <input
+            type="text"
+            (keydown.enter)="search(term)"
+            class="form-control input"
+            placeholder="Search GitHub"
+            [(ngModel)]="term"
+          />
+          <button *ngIf="term" class="btn btn-link btn-sm" (click)="term = ''">
+            <i class="fas fa-times"></i>
+          </button>
+          <button type="button" class="btn btn-light" (click)="search(term)">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6 col-6 d-flex justify-content-end">
+        <div class="container-fluid" *ngIf="users && users?.items?.length > 0">
+          <div class="row justify-content-md-center">
+            <div class="col-6">
+              <select
+                [(ngModel)]="sort"
+                class="form-control form-select form-select-sm"
+                aria-label=".form-select-lg example"
+                (change)="onPaginateSortChange($event.target.value)"
+              >
+                <option value="followers">Followers</option>
+                <option value="repositories">Repositories</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <select
+                [(ngModel)]="order"
+                class="form-control form-select form-select-sm"
+                aria-label=".form-select-lg example"
+                (change)="onPaginateChange($event.target.value)"
+              >
+                <option value="desc">Desc</option>
+                <option value="asc">Asc</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <ng-container
+          *ngIf="!isLoading && term && term.trim() && users?.items.length == 0"
+        >
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div
+                class="alert alert-danger"
+                style="text-align: center; margin-top: 17px"
+              >
+                We couldn’t find any repositories
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="users && users?.items?.length > 0">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th>Avatar</th>
+                <th>User</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users.items; trackBy: trackByFn">
+                <td>
+                  <div class="text-left">
+                    <img
+                      [src]="user.avatar_url"
+                      class="img-thumbnail"
+                      alt="{{ user.login }}"
+                      width="77"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <a
+                    href="{{ user.html_url }}"
+                    class="card-link"
+                    target="_blank"
+                  >
+                    {{ user.login }}</a
+                  >
+                  <div>
+                    <span class="badge rounded-pill bg-light text-dark">
+                      {{ user.type }}</span
+                    >
+                  </div>
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div
+            class="container-fluid"
+            style="margin-top: 17px; margin-bottom: 17px"
+            *ngIf="users && users?.total_count > 30"
+          >
+            <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                <div class="button-row">
+                  <a
+                    href="#"
+                    class="btn btn-secondary btn-sm disabled"
+                    style="margin-right: 7px"
+                    tabindex="-1"
+                    role="button"
+                    aria-disabled="true"
+                    *ngIf="page === 0"
+                    >Previous</a
+                  >
+                  <button
+                    type="button"
+                    (click)="paginate(-limit, -1)"
+                    class="btn btn-secondary btn-sm"
+                    style="margin-right: 7px"
+                    *ngIf="page > 0"
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="paginate(limit, 1)"
+                    class="btn btn-secondary btn-sm"
+                    *ngIf="
+                      users.total_count > limit && from < users.total_count
+                    "
+                  >
+                    Next
+                  </button>
+                  <a
+                    href="#"
+                    class="btn btn-secondary btn-sm disabled"
+                    tabindex="-1"
+                    role="button"
+                    aria-disabled="true"
+                    *ngIf="
+                      users.total_count < limit || from >= users.total_count
+                    "
+                    >Siguiente</a
+                  >
+                </div>
+              </div>
+
+              <div
+                class="col-lg-4 col-md-4 col-sm-4 col-4 d-flex justify-content-end"
+              >
+                <div class="container-fluid">
+                  <div class="row">
+                    <div
+                      class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-end"
+                    >
+                      <div>
+                        {{ from }} - {{ to }} de
+                        {{ users.total_count | number }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div>
+          <app-messages style="margin-top: 17px"></app-messages>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
