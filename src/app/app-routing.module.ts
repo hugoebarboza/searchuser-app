@@ -1,11 +1,31 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule),
+    data: {
+      title: 'GitHub Users',
+      subtitle: 'GitHub users list',
+      descripcion: 'Users managment',
+    },
+  },
+  {
+    path: '**',
+    redirectTo: 'notfound',
+  }];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(
+    routes,
+    {
+      useHash: true,
+      enableTracing: false,
+      preloadingStrategy: PreloadAllModules
+    }
+  )],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
