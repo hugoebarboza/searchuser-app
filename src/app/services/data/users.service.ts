@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';
-import { ReqResResponse } from 'src/app/models/';
+import { ReqResResponse, User } from 'src/app/models/';
 import { GLOBAL } from '../global';
 
 
@@ -11,22 +11,20 @@ import { GLOBAL } from '../global';
 })
 export class UsersService {
 
-  public url: string;
+  constructor(private http: HttpClient) { }
 
-  constructor(private http: HttpClient) {
-    this.url = GLOBAL.url;
-  }
-
-  getUser(term: string, sort = 'followers', order = 'desc', limit = 30, page = 0): Observable<ReqResResponse> {
+  getUsers(term: string, sort = 'followers', order = 'desc', limit: number, page = 0): Observable<ReqResResponse> {
     if (!term) { return; }
+
+    if (!limit) {
+      limit = 15;
+    }
 
     const paginate = `?q=${term}&sort=${sort}&order=${order}&per_page=${limit}&page=${page + 1}`;
 
-    const query = this.url + paginate;
+    const query = GLOBAL.searchUrl + paginate;
 
-    console.log(query);
-
-    return this.http.get<ReqResResponse>(query, { headers: { Accept: 'application/vnd.github.v3+json' } })
+    return this.http.get<ReqResResponse>(query)
       .pipe(
         shareReplay(),
         map(resp => {
@@ -36,6 +34,22 @@ export class UsersService {
           return throwError(error);
         })
       );
+  }
+
+  async getSingleUser(login: string): Promise<User> {
+    if (!login) { return; }
+
+    const query = GLOBAL.userUrl + login;
+
+    try {
+      return await this.http
+        .get<any>(query)
+        .toPromise()
+        .then()
+        .catch((error) => error);
+    } catch (err) {
+      throw new Error('Error HTTP ');
+    }
   }
 
 }

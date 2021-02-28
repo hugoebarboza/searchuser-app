@@ -74,9 +74,7 @@
 
     <div class="row">
       <div class="col">
-        <ng-container
-          *ngIf="!isLoading && term && term.trim() && users?.items.length == 0"
-        >
+        <ng-container *ngIf="!isLoading && users?.items.length == 0">
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
               <div
@@ -91,40 +89,9 @@
 
         <ng-container *ngIf="users && users?.items?.length > 0">
           <table class="table table-dark">
-            <thead>
-              <tr>
-                <th>Avatar</th>
-                <th>User</th>
-                <th>Email</th>
-              </tr>
-            </thead>
             <tbody>
               <tr *ngFor="let user of users.items; trackBy: trackByFn">
-                <td>
-                  <div class="text-left">
-                    <img
-                      [src]="user.avatar_url"
-                      class="img-thumbnail"
-                      alt="{{ user.login }}"
-                      width="77"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <a
-                    href="{{ user.html_url }}"
-                    class="card-link"
-                    target="_blank"
-                  >
-                    {{ user.login }}</a
-                  >
-                  <div>
-                    <span class="badge rounded-pill bg-light text-dark">
-                      {{ user.type }}</span
-                    >
-                  </div>
-                </td>
-                <td></td>
+                <app-user-detail [login]="user.login"></app-user-detail>
               </tr>
             </tbody>
           </table>

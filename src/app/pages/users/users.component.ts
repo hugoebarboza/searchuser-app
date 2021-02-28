@@ -16,7 +16,7 @@ export class UsersComponent implements OnInit {
   columnslimit = [15, 30, 100];
   from = 0;
   isLoading = true;
-  limit = 30;
+  limit = 15;
   order = 'desc';
   page = 0;
   pageSize = 0;
@@ -51,7 +51,7 @@ export class UsersComponent implements OnInit {
 
   private initParams(): void {
     this.from = 0;
-    this.limit = 30;
+    this.limit = 15;
     this.to = this.limit;
     this.pageSize = 0;
     this.page = 0;
@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
   private getQuery(sort?: string, order?: string, limit?: number, page?: number): any {
     this.isLoading = true;
 
-    const dataload$ = this.usersService.getUser(this.term, sort, order, limit, page)
+    const dataload$ = this.usersService.getUsers(this.term, sort, order, limit, page)
       .pipe(
         untilDestroyed(this),
         tap((resp: any) => {

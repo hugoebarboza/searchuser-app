@@ -1,0 +1,75 @@
+<!-----
+<span
+  class="d-inline-block"
+  tabindex="0"
+  style="cursor: pointer"
+  data-bs-toggle="tooltip"
+  title="{{ user.bio }}"
+  *ngIf="user && user.followers; else nofollow"
+>
+  <i class="far fa-star"></i> {{ user.followers | shortNumber }}
+</span>
+<ng-template #nofollow>
+  <span
+    class="d-inline-block"
+    style="cursor: pointer"
+    tabindex="0"
+    data-bs-toggle="tooltip"
+    title="{{ user.bio }}"
+    *ngIf="user"
+  >
+    <i class="far fa-star"></i> 0
+  </span>
+</ng-template>
+-->
+
+<td>
+  <div class="text-left">
+    <img
+      [src]="user.avatar_url"
+      class="img-thumbnail"
+      width="77"
+      *ngIf="user && user.avatar_url"
+    />
+  </div>
+</td>
+<td>
+  <a
+    href="{{ user.html_url }}"
+    class="card-link"
+    target="_blank"
+    *ngIf="user && user.html_url"
+  >
+    {{ user.login }}
+  </a>
+  <div *ngIf="user && user.bio">
+    <span>
+      {{ user.bio }}
+    </span>
+  </div>
+  <div>
+    <span
+      class="badge rounded-pill bg-light text-dark"
+      *ngIf="user && user.type"
+    >
+      {{ user.type }}
+
+      <span *ngIf="user && user.followers; else nofollow">
+        <i class="far fa-star"></i> {{ user.followers | shortNumber }}
+      </span>
+      <ng-template #nofollow>
+        <span> <i class="far fa-star"></i> 0 </span>
+      </ng-template>
+    </span>
+    <span
+      style="margin-left: 7px"
+      *ngIf="user && user.public_repos; else norepo"
+    >
+      <i class="fas fa-desktop"></i> {{ user.public_repos }}
+    </span>
+    <ng-template #norepo>
+      <span> <i class="fas fa-desktop"></i> 0 </span>
+    </ng-template>
+  </div>
+</td>
+<td></td>

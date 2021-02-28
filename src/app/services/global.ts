@@ -1,3 +1,4 @@
 export const GLOBAL = {
-  url: 'https://api.github.com/search/users',
+  searchUrl: 'https://api.github.com/search/users',
+  userUrl: 'https://api.github.com/users/',
 };
