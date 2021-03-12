@@ -12,7 +12,7 @@ import { ServicesModule } from './services/service.module';
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     CoreModule,
     ServicesModule.forRoot(),
     SharedModule,

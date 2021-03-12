@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "searchgituser-app"
+  },
+  "targets": {
+    "searchgituser-app": {
+      "hosting": {
+        "searchuser-app": [
+          "searchgituser-app"
+        ]
+      }
+    }
+  }
+}
